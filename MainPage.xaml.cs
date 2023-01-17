@@ -1,24 +1,44 @@
-﻿namespace MauiApp1;
+﻿using System.Windows.Input;
+
+namespace MauiApp1;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
-
-	public MainPage()
+	private bool canDrag1;
+	public bool CanDrag1
 	{
-		InitializeComponent();
+		get => canDrag1;
+		set
+		{
+			canDrag1 = value;
+			OnPropertyChanged();
+		}
 	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
+    private bool canDrag2;
+    public bool CanDrag2
+    {
+        get => canDrag2;
+        set
+        {
+            canDrag2 = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand ToggleCanDrag1Command { get; }
+    public ICommand ToggleCanDrag2Command { get; }
+
+    public MainPage()
 	{
-		count++;
+        CanDrag1 = false;
+        CanDrag2 = true;
+		ToggleCanDrag1Command = new Command(() => CanDrag1 = !CanDrag1);
+        ToggleCanDrag2Command = new Command(() => CanDrag2 = !CanDrag2);
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
-
-		SemanticScreenReader.Announce(CounterBtn.Text);
+        BindingContext = this;
+        
+        InitializeComponent();
 	}
 }
 
